@@ -62,3 +62,4 @@ Thumbs.db
 # Claude Code session files
 .claude/
 CLAUDE.md
+claude_run.sh
