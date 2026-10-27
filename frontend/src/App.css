@@ -1,0 +1,98 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  padding: 2rem;
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.health-check {
+  margin: 2rem 0;
+  padding: 2rem;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  min-width: 400px;
+}
+
+.success {
+  color: #4ade80;
+  padding: 1rem;
+  border: 2px solid #4ade80;
+  border-radius: 8px;
+  background-color: rgba(74, 222, 128, 0.1);
+}
+
+.error {
+  color: #f87171;
+  padding: 1rem;
+  border: 2px solid #f87171;
+  border-radius: 8px;
+  background-color: rgba(248, 113, 113, 0.1);
+}
+
+.error-detail {
+  font-size: 0.9em;
+  margin: 0.5rem 0;
+  font-family: monospace;
+}
+
+.help-text {
+  font-size: 0.8em;
+  margin-top: 1rem;
+  color: #94a3b8;
+}
+
+.help-text code {
+  background-color: #334155;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.health-details {
+  margin-top: 1rem;
+  text-align: left;
+  font-size: 0.9em;
+}
+
+.health-details p {
+  margin: 0.5rem 0;
+}
+
+.next-steps {
+  margin-top: 3rem;
+  padding: 2rem;
+  background-color: #1e293b;
+  border-radius: 8px;
+  max-width: 600px;
+}
+
+.next-steps ul {
+  text-align: left;
+  font-size: 0.9em;
+  line-height: 1.8;
+}
+
+.next-steps code {
+  background-color: #334155;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
