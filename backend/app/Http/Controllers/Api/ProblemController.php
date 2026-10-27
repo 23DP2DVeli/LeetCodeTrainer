@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
