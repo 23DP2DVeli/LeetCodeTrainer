@@ -25,6 +25,7 @@ yarn-error.log*
 frontend/node_modules/
 frontend/dist/
 frontend/.env
+/docs
 
 # Backend specific
 backend/vendor/
