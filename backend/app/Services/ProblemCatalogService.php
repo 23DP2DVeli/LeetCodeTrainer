@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+
+use App\Models\Submission;
 use App\Models\Problem;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -28,40 +30,49 @@ class ProblemCatalogService
         );
     }
 
-    public function syncProblem(string $slug): Problem
-    {
-        $data = $this->getProblem($slug);
 
-        $title = $data['questionTitle'] ?? null;
-        $difficulty = $data['difficulty'] ?? null;
-        $description = $data['question'] ?? null;
-        $constraints = $data['constraints'] ?? null;
-        $hints = $data['hints'] ?? null;
+public function syncProblem(string $slug): Problem
+{
+    $data = $this->getProblem($slug);
 
-        if (
-            ! $title ||
-            ! in_array($difficulty, ['Easy', 'Medium', 'Hard'], true)
-        ) {
-            throw new \UnexpectedValueException(
-                "Invalid problem metadata for slug: {$slug}"
-            );
-        }
+    $title = $data['questionTitle'] ?? null;
+    $difficulty = $data['difficulty'] ?? null;
+    $description = $data['question'] ?? null;
+    $constraints = $data['constraints'] ?? null;
+    $hints = $data['hints'] ?? null;
 
-        return Problem::updateOrCreate(
-            ['slug' => $slug],
-            [
-                'title' => $title,
-                'difficulty' => $difficulty,
-                'description' => $description,
-                'constraints' => $constraints,
-                'hints' => $hints,
-                'metadata' => [
-                    'leetcode_id' => $data['questionFrontendId'] ?? null,
-                    'url' => $data['link'] ?? null,
-                    'paid_only' => $data['isPaidOnly'] ?? null,
-                    'topic_tags' => $data['topicTags'] ?? [],
-                ],
-            ]
+    if (
+        ! $title ||
+        ! in_array($difficulty, ['Easy', 'Medium', 'Hard'], true)
+    ) {
+        throw new \UnexpectedValueException(
+            "Invalid problem metadata for slug: {$slug}"
         );
     }
+
+    $problem = Problem::updateOrCreate(
+        ['slug' => $slug],
+        [
+            'title' => $title,
+            'difficulty' => $difficulty,
+            'description' => $description,
+            'constraints' => $constraints,
+            'hints' => $hints,
+            'metadata' => [
+                'leetcode_id' => $data['questionFrontendId'] ?? null,
+                'url' => $data['link'] ?? null,
+                'paid_only' => $data['isPaidOnly'] ?? null,
+                'topic_tags' => $data['topicTags'] ?? [],
+            ],
+        ]
+    );
+
+    Submission::query()
+        ->where('problem_slug', $slug)
+        ->whereNull('problem_id')
+        ->update(['problem_id' => $problem->id]);
+
+    return $problem;
+}
+
 }

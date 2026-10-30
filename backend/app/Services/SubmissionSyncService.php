@@ -52,30 +52,28 @@ class SubmissionSyncService
                 }
 
                 $externalKey = hash('sha256', implode('|', [
-                    $slug,
-                    $timestamp,
-                    $status,
-                    $language,
-                ]));
+    $slug,
+    $timestamp,
+    $status,
+    $language,
+]));
 
-                $
-$problem = Problem::where('slug', $slug)->first();
+                $problem = Problem::where('slug', $slug)->first();
 
-$submission = Submission::firstOrCreate(
-    [
-        'external_key' => $externalKey,
-    ],
-    [
-        'user_id' => $user->id,
-        'problem_id' => $problem?->id,
-        'problem_slug' => $slug,
-        'status' => $status,
-        'language' => $language,
-        'submitted_at' => now()->setTimestamp((int) $timestamp),
-        'source' => 'leetcode_api',
-    ]
-);
-
+                $submission = Submission::firstOrCreate(
+                    ['external_key' => $externalKey],
+                    [
+                        'user_id' => $user->id,
+                        'problem_id' => $problem?->id,
+                        'problem_slug' => $slug,
+                        'status' => $status,
+                        'language' => $language,
+                        'submitted_at' => now()->setTimestamp(
+                            (int) $timestamp
+                        ),
+                        'source' => 'leetcode_api',
+                    ]
+                );
 
                 if ($submission->wasRecentlyCreated) {
                     $created++;
