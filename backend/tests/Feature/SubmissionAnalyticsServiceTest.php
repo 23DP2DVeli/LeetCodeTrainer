@@ -266,5 +266,55 @@ public function test_it_does_not_count_old_solved_problem_as_new_progress(): voi
 }
 
 
+public function test_it_calculates_submission_statistics_by_language(): void
+{
+    $user = User::factory()->create();
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'language' => 'javascript',
+        'status' => 'Accepted',
+    ]);
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'language' => 'javascript',
+        'status' => 'Wrong Answer',
+    ]);
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'language' => 'python3',
+        'status' => 'Accepted',
+    ]);
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'language' => 'python3',
+        'status' => 'Runtime Error',
+    ]);
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'language' => null,
+        'status' => 'Accepted',
+    ]);
+
+    $result = app(SubmissionAnalyticsService::class)
+        ->getLanguageBreakdown($user);
+
+    $this->assertSame([
+        'javascript' => [
+            'total_submissions' => 2,
+            'accepted_submissions' => 1,
+        ],
+        'python3' => [
+            'total_submissions' => 2,
+            'accepted_submissions' => 1,
+        ],
+    ], $result);
+}
+
+
 
 }

@@ -121,5 +121,28 @@ $accepted = Submission::query()
 }
 
 
+public function getLanguageBreakdown(User $user): array
+{
+    $languages = Submission::query()
+        ->where('user_id', $user->id)
+        ->whereNotNull('language')
+        ->selectRaw('
+            language,
+            COUNT(*) as total_submissions,
+            SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as accepted_submissions
+        ', ['Accepted'])
+        ->groupBy('language')
+        ->get();
+
+    return $languages->mapWithKeys(function ($item) {
+        return [
+            $item->language => [
+                'total_submissions' => (int) $item->total_submissions,
+                'accepted_submissions' => (int) $item->accepted_submissions,
+            ],
+        ];
+    })->toArray();
+}
+
 
 }
