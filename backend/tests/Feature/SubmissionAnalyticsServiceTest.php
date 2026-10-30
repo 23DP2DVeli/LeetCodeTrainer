@@ -195,4 +195,76 @@ public function test_it_returns_zero_activity_for_empty_days(): void
 }
 
 
+
+public function test_it_counts_problem_only_on_first_accepted_submission(): void
+{
+    $user = User::factory()->create();
+
+    $problem = \App\Models\Problem::factory()->create();
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'problem_id' => $problem->id,
+        'problem_slug' => $problem->slug,
+        'status' => 'Accepted',
+        'submitted_at' => now()->subDays(3),
+    ]);
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'problem_id' => $problem->id,
+        'problem_slug' => $problem->slug,
+        'status' => 'Accepted',
+        'submitted_at' => now()->subDay(),
+    ]);
+
+    $activity = app(SubmissionAnalyticsService::class)
+        ->getDailyActivity($user);
+
+    $firstDate = now()->subDays(3)->toDateString();
+    $secondDate = now()->subDay()->toDateString();
+
+    $firstDay = collect($activity)->firstWhere('date', $firstDate);
+    $secondDay = collect($activity)->firstWhere('date', $secondDate);
+
+    $this->assertSame(1, $firstDay['solved_problems']);
+    $this->assertSame(0, $secondDay['solved_problems']);
+}
+
+
+public function test_it_does_not_count_old_solved_problem_as_new_progress(): void
+{
+    $user = User::factory()->create();
+
+    $problem = \App\Models\Problem::factory()->create();
+
+    // Первое решение было 40 дней назад
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'problem_id' => $problem->id,
+        'problem_slug' => $problem->slug,
+        'status' => 'Accepted',
+        'submitted_at' => now()->subDays(40),
+    ]);
+
+    // Повторная успешная отправка сегодня
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'problem_id' => $problem->id,
+        'problem_slug' => $problem->slug,
+        'status' => 'Accepted',
+        'submitted_at' => now(),
+    ]);
+
+    $activity = app(SubmissionAnalyticsService::class)
+        ->getDailyActivity($user);
+
+    $today = collect($activity)->last();
+
+    $this->assertSame(1, $today['submissions']);
+    $this->assertSame(0, $today['solved_problems']);
+}
+
+
+
 }

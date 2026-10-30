@@ -64,6 +64,7 @@ public function getDifficultyBreakdown(User $user): array
 
 
 
+
 public function getDailyActivity(User $user): array
 {
     $startDate = Carbon::today()->subDays(29);
@@ -76,20 +77,33 @@ public function getDailyActivity(User $user): array
             $endDate->copy()->endOfDay(),
         ])
         ->selectRaw('DATE(submitted_at) as date, COUNT(*) as total')
-        ->groupBy('date')
+        ->groupByRaw('DATE(submitted_at)')
         ->pluck('total', 'date');
 
-    $accepted = Submission::query()
-        ->where('user_id', $user->id)
-        ->where('status', 'Accepted')
-        ->whereNotNull('problem_id')
-        ->whereBetween('submitted_at', [
+
+$accepted = Submission::query()
+    ->where('submissions.user_id', $user->id)
+    ->where('submissions.status', 'Accepted')
+    ->whereNotNull('submissions.problem_id')
+    ->selectRaw('
+        submissions.problem_id,
+        MIN(submissions.submitted_at) as first_solved_at
+    ')
+    ->groupBy('submissions.problem_id')
+    ->havingRaw(
+        'MIN(submissions.submitted_at) BETWEEN ? AND ?',
+        [
             $startDate->copy()->startOfDay(),
             $endDate->copy()->endOfDay(),
-        ])
-        ->selectRaw('DATE(submitted_at) as date, COUNT(DISTINCT problem_id) as total')
-        ->groupBy('date')
-        ->pluck('total', 'date');
+        ]
+    )
+    ->get()
+    ->groupBy(fn ($submission) => Carbon::parse(
+        $submission->first_solved_at
+    )->toDateString())
+    ->map(fn ($submissions) => $submissions->count());
+
+
 
     $activity = [];
 
@@ -105,6 +119,7 @@ public function getDailyActivity(User $user): array
 
     return $activity;
 }
+
 
 
 }
