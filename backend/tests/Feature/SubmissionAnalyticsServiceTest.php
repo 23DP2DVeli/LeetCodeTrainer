@@ -77,4 +77,122 @@ class SubmissionAnalyticsServiceTest extends TestCase
         $this->assertSame(0, $overview['total_submissions']);
         $this->assertSame(0, $overview['solved_problems']);
     }
+
+
+
+public function test_it_calculates_solved_problems_by_difficulty(): void
+{
+    $user = User::factory()->create();
+
+    $easy = \App\Models\Problem::factory()->create([
+        'difficulty' => 'Easy',
+    ]);
+
+    $medium = \App\Models\Problem::factory()->create([
+        'difficulty' => 'Medium',
+    ]);
+
+    $hard = \App\Models\Problem::factory()->create([
+        'difficulty' => 'Hard',
+    ]);
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'problem_id' => $easy->id,
+        'status' => 'Accepted',
+    ]);
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'problem_id' => $easy->id,
+        'status' => 'Accepted',
+    ]);
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'problem_id' => $medium->id,
+        'status' => 'Accepted',
+    ]);
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'problem_id' => $hard->id,
+        'status' => 'Wrong Answer',
+    ]);
+
+    $result = app(SubmissionAnalyticsService::class)
+        ->getDifficultyBreakdown($user);
+
+    $this->assertSame([
+        'Easy' => 1,
+        'Medium' => 1,
+        'Hard' => 0,
+    ], $result);
+}
+
+public function test_it_returns_zeroes_when_user_has_no_solved_problems(): void
+{
+    $user = User::factory()->create();
+
+    $result = app(SubmissionAnalyticsService::class)
+        ->getDifficultyBreakdown($user);
+
+    $this->assertSame([
+        'Easy' => 0,
+        'Medium' => 0,
+        'Hard' => 0,
+    ], $result);
+}
+
+
+public function test_it_returns_30_days_of_daily_activity(): void
+{
+    $user = User::factory()->create();
+
+    $problem = \App\Models\Problem::factory()->create();
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'problem_id' => $problem->id,
+        'problem_slug' => $problem->slug,
+        'status' => 'Accepted',
+        'submitted_at' => now()->startOfDay(),
+    ]);
+
+    Submission::factory()->create([
+        'user_id' => $user->id,
+        'problem_id' => $problem->id,
+        'problem_slug' => $problem->slug,
+        'status' => 'Wrong Answer',
+        'submitted_at' => now()->startOfDay(),
+    ]);
+
+    $activity = app(SubmissionAnalyticsService::class)
+        ->getDailyActivity($user);
+
+    $this->assertCount(30, $activity);
+
+    $today = collect($activity)->last();
+
+    $this->assertSame(now()->toDateString(), $today['date']);
+    $this->assertSame(2, $today['submissions']);
+    $this->assertSame(1, $today['solved_problems']);
+}
+
+public function test_it_returns_zero_activity_for_empty_days(): void
+{
+    $user = User::factory()->create();
+
+    $activity = app(SubmissionAnalyticsService::class)
+        ->getDailyActivity($user);
+
+    $this->assertCount(30, $activity);
+
+    foreach ($activity as $day) {
+        $this->assertSame(0, $day['submissions']);
+        $this->assertSame(0, $day['solved_problems']);
+    }
+}
+
+
 }
