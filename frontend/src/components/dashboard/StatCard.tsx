@@ -19,7 +19,7 @@ function StatCard({ title, value, icon: Icon, accent }: StatCardProps) {
             <h2 className="stat-card-value">{value}</h2>
           </div>
 
-          <div className="stat-card-icon">
+          <div className="stat-card-icon" aria-hidden="true">
             <Icon size={20} strokeWidth={1.8} />
           </div>
         </div>

@@ -25,7 +25,7 @@
   height: 30px;
   display: grid;
   place-items: center;
-  border-radius: 8px;
+  border-radius: 0;
   background: var(--color-primary);
   color: white;
   font-weight: 700;
@@ -52,10 +52,14 @@
   gap: 12px;
   min-height: 40px;
   padding: 0 10px;
-  border-radius: var(--radius-md);
+  border-radius: 0;
   color: var(--color-text-secondary);
   font-size: 13px;
   font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .sidebar-item.active {
@@ -68,4 +72,15 @@
   margin-top: auto;
   padding-top: 16px;
   border-top: 1px solid var(--color-border);
+}
+
+.sidebar-item:not(.active):hover {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-item {
+    transition: none;
+  }
 }

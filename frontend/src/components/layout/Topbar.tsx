@@ -30,10 +30,13 @@ function Topbar({ onRefresh, refreshing }: TopbarProps) {
           className="refresh-button"
           onClick={onRefresh}
           disabled={refreshing}
+          aria-label={refreshing ? "Refreshing analytics" : "Refresh analytics"}
+          aria-busy={refreshing}
         >
           <RefreshCw
             size={15}
             className={refreshing ? "refresh-spinning" : ""}
+            aria-hidden="true"
           />
           <span>{refreshing ? "Refreshing..." : "Refresh"}</span>
         </button>

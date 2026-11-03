@@ -7,8 +7,14 @@ interface LanguageBreakdownProps {
 }
 
 function LanguageBreakdown({ data }: LanguageBreakdownProps) {
-  const languages = Object.entries(data);
+  const languages = Object.entries(data).sort(
+    ([, a], [, b]) => b.total_submissions - a.total_submissions,
+  );
 
+  const totalSubmissions = languages.reduce(
+    (sum, [, stats]) => sum + stats.total_submissions,
+    0,
+  );
   if (languages.length === 0) {
     return (
       <Card className="language-breakdown">
@@ -30,7 +36,9 @@ function LanguageBreakdown({ data }: LanguageBreakdownProps) {
             <h3>Language breakdown</h3>
             <p>Submission performance by programming language</p>
           </div>
-          <span>{languages.length} languages</span>
+          <span>
+            {languages.length} languages · {totalSubmissions} submissions
+          </span>
         </div>
 
         <div className="language-breakdown-list">

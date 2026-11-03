@@ -1,9 +1,10 @@
 .activity-chart,
-.difficulty-chart {
+.difficulty-chart,
+.activity-heatmap {
   padding: 24px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: 0;
   box-shadow: var(--shadow-sm);
 }
 
@@ -89,7 +90,7 @@
 }
 .language-breakdown {
   border: 1px solid var(--color-border) !important;
-  border-radius: var(--radius-lg) !important;
+  border-radius: 0 !important;
   box-shadow: var(--shadow-sm);
 }
 
@@ -158,11 +159,11 @@
   flex: 1;
   height: 7px;
   background: var(--color-surface-muted);
-  border-radius: 10px;
+  border-radius: 0px;
 }
 
 .language-breakdown-progress .progress-bar {
-  border-radius: 10px;
+  border-radius: 0px;
 }
 
 .language-breakdown-progress > strong {
@@ -180,18 +181,6 @@
 
 /* Activity Heatmap */
 /* Activity Heatmap */
-
-.activity-heatmap {
-  padding: 24px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-}
-
-.activity-chart-header {
-  margin-bottom: 20px;
-}
 
 .activity-chart-header h3 {
   color: #172033;
@@ -285,7 +274,7 @@
 .heatmap-cell {
   width: 12px;
   height: 12px;
-  border-radius: 3px;
+  border-radius: 0;
   border: 1px solid rgba(20, 35, 60, 0.04);
 }
 
@@ -394,14 +383,22 @@
 
 /* LeetCode Activity Calendar Tooltip */
 .react-activity-calendar__tooltip {
-  background: #172033 !important;
-  color: #ffffff !important;
+  background: #ffffff !important;
+  color: #000000 !important;
   border: 1px solid #334155 !important;
-  border-radius: 10px !important;
+  border-radius: 0 !important;
   padding: 10px 14px !important;
   font-size: 13px !important;
   font-weight: 600 !important;
   line-height: 1.5 !important;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2) !important;
   z-index: 9999 !important;
+}
+
+.difficulty-legend-percentage {
+  margin-left: auto;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }

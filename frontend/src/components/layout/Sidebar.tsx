@@ -31,7 +31,7 @@ function Sidebar() {
             className={`sidebar-item ${active ? "active" : ""}`}
             aria-current={active ? "page" : undefined}
           >
-            <Icon size={18} strokeWidth={1.8} />
+            <Icon size={18} strokeWidth={1.8} aria-hidden="true" />
             <span>{label}</span>
           </div>
         ))}
