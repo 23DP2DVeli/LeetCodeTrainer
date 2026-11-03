@@ -1,0 +1,407 @@
+.activity-chart,
+.difficulty-chart {
+  padding: 24px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.activity-chart-header,
+.difficulty-chart-header {
+  margin-bottom: 20px;
+}
+
+.activity-chart-header h3,
+.difficulty-chart-header h3,
+.language-breakdown-header h3 {
+  color: #172033;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.activity-chart-header p,
+.difficulty-chart-header p,
+.language-breakdown-header p {
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.difficulty-chart-content {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.difficulty-chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 120px;
+}
+
+.difficulty-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.difficulty-legend-item strong {
+  margin-left: auto;
+  color: var(--color-text);
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.difficulty-legend-dot {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.difficulty-chart-empty {
+  padding: 40px 0;
+  color: var(--color-text-muted);
+  text-align: center;
+  font-size: 13px;
+}
+
+@media (max-width: 576px) {
+  .activity-chart,
+  .difficulty-chart {
+    padding: 18px;
+  }
+
+  .difficulty-chart-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .difficulty-chart-legend {
+    width: 100%;
+  }
+}
+.language-breakdown {
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.language-breakdown .card-body {
+  padding: 24px;
+}
+
+.language-breakdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.language-breakdown-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.language-breakdown-header p {
+  margin-top: 5px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.language-breakdown-header > span {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.language-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.language-breakdown-info,
+.language-breakdown-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.language-breakdown-info {
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.language-breakdown-info strong,
+.language-breakdown-progress strong {
+  color: var(--color-text);
+}
+
+.language-breakdown-info span {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.language-breakdown-progress {
+  gap: 16px;
+}
+
+.language-breakdown-progress .progress {
+  flex: 1;
+  height: 7px;
+  background: var(--color-surface-muted);
+  border-radius: 10px;
+}
+
+.language-breakdown-progress .progress-bar {
+  border-radius: 10px;
+}
+
+.language-breakdown-progress > strong {
+  min-width: 48px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.language-breakdown-empty {
+  padding: 24px 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+/* Activity Heatmap */
+/* Activity Heatmap */
+
+.activity-heatmap {
+  padding: 24px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.activity-chart-header {
+  margin-bottom: 20px;
+}
+
+.activity-chart-header h3 {
+  color: #172033;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.activity-chart-header p {
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.heatmap-summary {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 24px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.heatmap-summary strong {
+  color: #172033;
+  font-size: 21px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.heatmap-scroll {
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.heatmap {
+  width: fit-content;
+  min-width: 0;
+}
+
+.heatmap-months {
+  position: relative;
+  height: 20px;
+  margin-left: 38px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.heatmap-months span {
+  position: absolute;
+  white-space: nowrap;
+}
+
+.heatmap-body {
+  display: flex;
+  gap: 10px;
+}
+
+.heatmap-weekdays {
+  display: grid;
+  grid-template-rows: repeat(7, 12px);
+  row-gap: 4px;
+  width: 28px;
+  flex-shrink: 0;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.heatmap-weekdays span:nth-child(1) {
+  grid-row: 1;
+}
+
+.heatmap-weekdays span:nth-child(2) {
+  grid-row: 3;
+}
+
+.heatmap-weekdays span:nth-child(3) {
+  grid-row: 5;
+}
+
+.heatmap-grid {
+  display: grid;
+  grid-template-rows: repeat(7, 12px);
+  column-gap: 4px;
+  row-gap: 4px;
+}
+
+.heatmap-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(20, 35, 60, 0.04);
+}
+
+.heatmap-level-0 {
+  background: #edf0f4;
+}
+
+.heatmap-level-1 {
+  background: #c6d8fc;
+}
+
+.heatmap-level-2 {
+  background: #8fb4f8;
+}
+
+.heatmap-level-3 {
+  background: #568be9;
+}
+
+.heatmap-level-4 {
+  background: #2858c7;
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 16px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.heatmap-legend .heatmap-cell {
+  width: 11px;
+  height: 11px;
+}
+
+.heatmap-cell[title] {
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    outline 0.15s ease;
+}
+
+.heatmap-cell[title]:hover {
+  transform: scale(1.25);
+  outline: 1px solid #64748b;
+  outline-offset: 1px;
+}
+
+@media (max-width: 576px) {
+  .activity-heatmap {
+    padding: 18px;
+  }
+}
+
+/* Activity Calendar Library */
+
+.activity-heatmap .activity-chart-header h3 {
+  color: #172033 !important;
+  font-weight: 700;
+}
+
+.activity-heatmap .activity-chart-header p {
+  color: #64748b !important;
+  font-weight: 500;
+}
+
+.activity-heatmap .heatmap-summary {
+  color: #64748b !important;
+}
+
+.activity-heatmap .heatmap-summary strong {
+  color: #172033 !important;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+/* Calendar text */
+
+.leetcode-activity-calendar text {
+  fill: #64748b !important;
+  font-weight: 500;
+}
+
+/* Calendar legend */
+
+.leetcode-activity-calendar {
+  max-width: 100%;
+}
+
+/* Activity Calendar typography */
+
+.leetcode-activity-calendar {
+  color: #475569 !important;
+}
+
+.leetcode-activity-calendar__legend-weekday text,
+.leetcode-activity-calendar__legend-month text {
+  fill: #475569 !important;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* LeetCode Activity Calendar Tooltip */
+.react-activity-calendar__tooltip {
+  background: #172033 !important;
+  color: #ffffff !important;
+  border: 1px solid #334155 !important;
+  border-radius: 10px !important;
+  padding: 10px 14px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2) !important;
+  z-index: 9999 !important;
+}

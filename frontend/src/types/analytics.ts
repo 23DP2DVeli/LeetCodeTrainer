@@ -15,6 +15,7 @@ export interface DifficultyBreakdown {
 export interface DailyActivity {
   date: string;
   submissions: number;
+  accepted_submissions: number;
   solved_problems: number;
 }
 
