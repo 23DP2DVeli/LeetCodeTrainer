@@ -1,9 +1,15 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "leetcode-trainer/backend",
+    "description": "A programming analytics platform that analyzes LeetCode submissions and tracks problem-solving progress.",
+    "keywords": [
+        "laravel",
+        "react",
+        "leetcode",
+        "analytics",
+        "education"
+    ],
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
         "php": "^8.3",

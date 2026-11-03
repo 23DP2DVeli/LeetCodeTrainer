@@ -1,3 +1,5 @@
+/* Shared chart cards */
+
 .activity-chart,
 .difficulty-chart,
 .activity-heatmap {
@@ -7,6 +9,8 @@
   border-radius: 0;
   box-shadow: var(--shadow-sm);
 }
+
+/* Chart headers */
 
 .activity-chart-header,
 .difficulty-chart-header {
@@ -30,6 +34,8 @@
   font-size: 13px;
   font-weight: 500;
 }
+
+/* Difficulty chart */
 
 .difficulty-chart-content {
   display: flex;
@@ -66,6 +72,14 @@
   border-radius: 50%;
 }
 
+.difficulty-legend-percentage {
+  margin-left: auto;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
 .difficulty-chart-empty {
   padding: 40px 0;
   color: var(--color-text-muted);
@@ -73,21 +87,8 @@
   font-size: 13px;
 }
 
-@media (max-width: 576px) {
-  .activity-chart,
-  .difficulty-chart {
-    padding: 18px;
-  }
+/* Language breakdown */
 
-  .difficulty-chart-content {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .difficulty-chart-legend {
-    width: 100%;
-  }
-}
 .language-breakdown {
   border: 1px solid var(--color-border) !important;
   border-radius: 0 !important;
@@ -104,17 +105,6 @@
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 24px;
-}
-
-.language-breakdown-header h3 {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.language-breakdown-header p {
-  margin-top: 5px;
-  color: var(--color-text-secondary);
-  font-size: 12px;
 }
 
 .language-breakdown-header > span {
@@ -151,19 +141,15 @@
   font-size: 12px;
 }
 
-.language-breakdown-progress {
-  gap: 16px;
-}
-
 .language-breakdown-progress .progress {
   flex: 1;
   height: 7px;
   background: var(--color-surface-muted);
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 .language-breakdown-progress .progress-bar {
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 .language-breakdown-progress > strong {
@@ -179,24 +165,13 @@
   font-size: 13px;
 }
 
-/* Activity Heatmap */
-/* Activity Heatmap */
+/* Activity heatmap */
 
-.activity-chart-header h3 {
-  color: #172033;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
+.activity-heatmap .activity-chart-header {
+  margin-bottom: 20px;
 }
 
-.activity-chart-header p {
-  margin-top: 5px;
-  color: #64748b;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.heatmap-summary {
+.activity-heatmap .heatmap-summary {
   display: flex;
   gap: 28px;
   margin-bottom: 24px;
@@ -205,173 +180,23 @@
   font-weight: 500;
 }
 
-.heatmap-summary strong {
+.activity-heatmap .heatmap-summary strong {
   color: #172033;
   font-size: 21px;
   font-weight: 700;
   font-family: var(--font-mono);
 }
 
-.heatmap-scroll {
-  overflow-x: auto;
-  padding-bottom: 8px;
+/* Activity calendar library */
+
+.leetcode-activity-calendar {
+  max-width: 100%;
+  color: #475569 !important;
 }
-
-.heatmap {
-  width: fit-content;
-  min-width: 0;
-}
-
-.heatmap-months {
-  position: relative;
-  height: 20px;
-  margin-left: 38px;
-  color: #64748b;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.heatmap-months span {
-  position: absolute;
-  white-space: nowrap;
-}
-
-.heatmap-body {
-  display: flex;
-  gap: 10px;
-}
-
-.heatmap-weekdays {
-  display: grid;
-  grid-template-rows: repeat(7, 12px);
-  row-gap: 4px;
-  width: 28px;
-  flex-shrink: 0;
-  color: #64748b;
-  font-size: 10px;
-  font-weight: 500;
-}
-
-.heatmap-weekdays span:nth-child(1) {
-  grid-row: 1;
-}
-
-.heatmap-weekdays span:nth-child(2) {
-  grid-row: 3;
-}
-
-.heatmap-weekdays span:nth-child(3) {
-  grid-row: 5;
-}
-
-.heatmap-grid {
-  display: grid;
-  grid-template-rows: repeat(7, 12px);
-  column-gap: 4px;
-  row-gap: 4px;
-}
-
-.heatmap-cell {
-  width: 12px;
-  height: 12px;
-  border-radius: 0;
-  border: 1px solid rgba(20, 35, 60, 0.04);
-}
-
-.heatmap-level-0 {
-  background: #edf0f4;
-}
-
-.heatmap-level-1 {
-  background: #c6d8fc;
-}
-
-.heatmap-level-2 {
-  background: #8fb4f8;
-}
-
-.heatmap-level-3 {
-  background: #568be9;
-}
-
-.heatmap-level-4 {
-  background: #2858c7;
-}
-
-.heatmap-legend {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 5px;
-  margin-top: 16px;
-  color: #64748b;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.heatmap-legend .heatmap-cell {
-  width: 11px;
-  height: 11px;
-}
-
-.heatmap-cell[title] {
-  cursor: pointer;
-  transition:
-    transform 0.15s ease,
-    outline 0.15s ease;
-}
-
-.heatmap-cell[title]:hover {
-  transform: scale(1.25);
-  outline: 1px solid #64748b;
-  outline-offset: 1px;
-}
-
-@media (max-width: 576px) {
-  .activity-heatmap {
-    padding: 18px;
-  }
-}
-
-/* Activity Calendar Library */
-
-.activity-heatmap .activity-chart-header h3 {
-  color: #172033 !important;
-  font-weight: 700;
-}
-
-.activity-heatmap .activity-chart-header p {
-  color: #64748b !important;
-  font-weight: 500;
-}
-
-.activity-heatmap .heatmap-summary {
-  color: #64748b !important;
-}
-
-.activity-heatmap .heatmap-summary strong {
-  color: #172033 !important;
-  font-size: 21px;
-  font-weight: 700;
-}
-
-/* Calendar text */
 
 .leetcode-activity-calendar text {
   fill: #64748b !important;
   font-weight: 500;
-}
-
-/* Calendar legend */
-
-.leetcode-activity-calendar {
-  max-width: 100%;
-}
-
-/* Activity Calendar typography */
-
-.leetcode-activity-calendar {
-  color: #475569 !important;
 }
 
 .leetcode-activity-calendar__legend-weekday text,
@@ -381,10 +206,11 @@
   font-weight: 600;
 }
 
-/* LeetCode Activity Calendar Tooltip */
+/* Activity calendar tooltip */
+
 .react-activity-calendar__tooltip {
   background: #ffffff !important;
-  color: #000000 !important;
+  color: #172033 !important;
   border: 1px solid #334155 !important;
   border-radius: 0 !important;
   padding: 10px 14px !important;
@@ -395,10 +221,35 @@
   z-index: 9999 !important;
 }
 
-.difficulty-legend-percentage {
-  margin-left: auto;
-  color: #64748b;
-  font-size: 12px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
+/* Responsive layout */
+
+@media (max-width: 576px) {
+  .activity-chart,
+  .difficulty-chart,
+  .activity-heatmap {
+    padding: 18px;
+  }
+
+  .difficulty-chart-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .difficulty-chart-legend {
+    width: 100%;
+  }
+
+  .language-breakdown .card-body {
+    padding: 18px;
+  }
+
+  .language-breakdown-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .activity-heatmap .heatmap-summary {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
 }

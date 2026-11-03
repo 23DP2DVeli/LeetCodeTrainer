@@ -8,11 +8,18 @@ export async function getAnalytics(
 ): Promise<AnalyticsResponse> {
   const response = await fetch(
     `${API_URL}/users/${encodeURIComponent(username)}/analytics`,
+    {
+      headers: {
+        Accept: "application/json",
+      },
+    },
   );
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch analytics: ${response.status}`);
+    throw new Error(
+      `Failed to fetch analytics (${response.status} ${response.statusText})`,
+    );
   }
 
-  return response.json() as Promise<AnalyticsResponse>;
+  return (await response.json()) as AnalyticsResponse;
 }

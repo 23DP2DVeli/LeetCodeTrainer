@@ -1,0 +1,81 @@
+.dashboard-skeleton,
+.charts-skeleton {
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-card,
+.skeleton-chart {
+  padding: 24px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.skeleton-line,
+.skeleton-chart-area {
+  background: linear-gradient(90deg, #edf0f4 25%, #f7f8fa 50%, #edf0f4 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-line {
+  height: 12px;
+  margin-bottom: 12px;
+}
+
+.skeleton-label {
+  width: 45%;
+}
+
+.skeleton-value {
+  width: 65%;
+  height: 28px;
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.skeleton-heading {
+  width: 30%;
+  height: 16px;
+}
+
+.skeleton-subheading {
+  width: 45%;
+  height: 11px;
+}
+
+.skeleton-chart-area {
+  width: 100%;
+  height: 220px;
+  margin-top: 24px;
+}
+
+.skeleton-chart-small {
+  height: 180px;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .skeleton-card,
+  .skeleton-chart {
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-line,
+  .skeleton-chart-area {
+    animation: none;
+  }
+}

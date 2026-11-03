@@ -5,6 +5,10 @@ import { Code2, Send, Target, CheckCircle2 } from "lucide-react";
 import Sidebar from "./components/layout/Sidebar";
 import Topbar from "./components/layout/Topbar";
 import StatCard from "./components/dashboard/StatCard";
+import {
+  DashboardSkeleton,
+  ChartsSkeleton,
+} from "./components/dashboard/DashboardSkeleton";
 
 const PerformanceTrend = lazy(
   () => import("./components/dashboard/PerformanceTrend"),
@@ -13,6 +17,7 @@ const PerformanceTrend = lazy(
 const ActivityHeatmap = lazy(
   () => import("./components/dashboard/ActivityHeatmap"),
 );
+
 const DifficultyChart = lazy(
   () => import("./components/dashboard/DifficultyChart"),
 );
@@ -25,50 +30,6 @@ import { getAnalytics } from "./api/analytics";
 import type { AnalyticsResponse } from "./types/analytics";
 
 import "./App.css";
-
-function DashboardSkeleton() {
-  return (
-    <div className="dashboard-skeleton" aria-label="Loading dashboard">
-      <Row className="g-3">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <Col xs={12} sm={6} xl={3} key={index}>
-            <div className="skeleton-card">
-              <div className="skeleton-line skeleton-label" />
-              <div className="skeleton-line skeleton-value" />
-            </div>
-          </Col>
-        ))}
-      </Row>
-
-      <div className="skeleton-chart mt-4">
-        <div className="skeleton-line skeleton-heading" />
-        <div className="skeleton-line skeleton-subheading" />
-        <div className="skeleton-chart-area" />
-      </div>
-
-      <div className="skeleton-chart mt-4">
-        <div className="skeleton-line skeleton-heading" />
-        <div className="skeleton-line skeleton-subheading" />
-        <div className="skeleton-chart-area" />
-      </div>
-
-      <Row className="g-3 mt-1">
-        <Col xs={12} xl={6}>
-          <div className="skeleton-chart">
-            <div className="skeleton-line skeleton-heading" />
-            <div className="skeleton-chart-area skeleton-chart-small" />
-          </div>
-        </Col>
-        <Col xs={12} xl={6}>
-          <div className="skeleton-chart">
-            <div className="skeleton-line skeleton-heading" />
-            <div className="skeleton-chart-area skeleton-chart-small" />
-          </div>
-        </Col>
-      </Row>
-    </div>
-  );
-}
 
 function App() {
   const [analytics, setAnalytics] = useState<AnalyticsResponse | null>(null);
@@ -92,6 +53,8 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // Initial data fetching is an external synchronization.
+    // eslint-disable-next-line react/set-state-in-effect
     void fetchAnalytics();
   }, [fetchAnalytics]);
 
@@ -152,10 +115,12 @@ function App() {
                   />
                 </Col>
               </Row>
-              <Suspense fallback={<p>Loading charts...</p>}>
+
+              <Suspense fallback={<ChartsSkeleton />}>
                 <div className="mt-4">
                   <ActivityHeatmap data={analytics.daily_activity} />
                 </div>
+
                 <div className="mt-4">
                   <PerformanceTrend data={analytics.daily_activity} />
                 </div>

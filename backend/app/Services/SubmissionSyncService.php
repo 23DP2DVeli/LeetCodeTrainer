@@ -52,6 +52,7 @@ class SubmissionSyncService
                 }
 
                 $externalKey = hash('sha256', implode('|', [
+    $user->id,
     $slug,
     $timestamp,
     $status,

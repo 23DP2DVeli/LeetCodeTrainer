@@ -26,7 +26,7 @@ class SubmissionAnalyticsService
         $solvedProblems = (clone $query)
             ->where('status', 'Accepted')
             ->whereNotNull('problem_slug')
-            ->distinct('problem_slug')
+            ->distinct()
             ->count('problem_slug');
 
         $successRate = $totalSubmissions > 0
@@ -42,119 +42,107 @@ class SubmissionAnalyticsService
         ];
     }
 
+    public function getDifficultyBreakdown(User $user): array
+    {
+        $counts = Submission::query()
+            ->join('problems', 'submissions.problem_id', '=', 'problems.id')
+            ->where('submissions.user_id', $user->id)
+            ->where('submissions.status', 'Accepted')
+            ->selectRaw(
+                'problems.difficulty, COUNT(DISTINCT problems.id) as solved'
+            )
+            ->groupBy('problems.difficulty')
+            ->pluck('solved', 'difficulty');
 
-
-public function getDifficultyBreakdown(User $user): array
-{
-    $counts = Submission::query()
-        ->join('problems', 'submissions.problem_id', '=', 'problems.id')
-        ->where('submissions.user_id', $user->id)
-        ->where('submissions.status', 'Accepted')
-        ->selectRaw('problems.difficulty, COUNT(DISTINCT problems.id) as solved')
-        ->groupBy('problems.difficulty')
-        ->pluck('solved', 'difficulty');
-
-    return [
-        'Easy' => (int) ($counts['Easy'] ?? 0),
-        'Medium' => (int) ($counts['Medium'] ?? 0),
-        'Hard' => (int) ($counts['Hard'] ?? 0),
-    ];
-}
-
-
-
-
-
-public function getDailyActivity(User $user): array
-{
-    $startDate = Carbon::today()->subDays(83);
-    $endDate = Carbon::today();
-
-    $submissions = Submission::query()
-        ->where('user_id', $user->id)
-        ->whereBetween('submitted_at', [
-            $startDate->copy()->startOfDay(),
-            $endDate->copy()->endOfDay(),
-        ])
-        ->selectRaw('DATE(submitted_at) as date, COUNT(*) as total')
-        ->groupByRaw('DATE(submitted_at)')
-        ->pluck('total', 'date');
-
-    $acceptedSubmissions = Submission::query()
-    ->where('user_id', $user->id)
-    ->where('status', 'Accepted')
-    ->whereBetween('submitted_at', [
-        $startDate->copy()->startOfDay(),
-        $endDate->copy()->endOfDay(),
-    ])
-    ->selectRaw('DATE(submitted_at) as date, COUNT(*) as total')
-    ->groupByRaw('DATE(submitted_at)')
-    ->pluck('total', 'date');
-
-
-$accepted = Submission::query()
-    ->where('submissions.user_id', $user->id)
-    ->where('submissions.status', 'Accepted')
-    ->whereNotNull('submissions.problem_id')
-    ->selectRaw('
-        submissions.problem_id,
-        MIN(submissions.submitted_at) as first_solved_at
-    ')
-    ->groupBy('submissions.problem_id')
-    ->havingRaw(
-        'MIN(submissions.submitted_at) BETWEEN ? AND ?',
-        [
-            $startDate->copy()->startOfDay(),
-            $endDate->copy()->endOfDay(),
-        ]
-    )
-    ->get()
-    ->groupBy(fn ($submission) => Carbon::parse(
-        $submission->first_solved_at
-    )->toDateString())
-    ->map(fn ($submissions) => $submissions->count());
-
-
-
-    $activity = [];
-
-    for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
-        $key = $date->toDateString();
-
-        $activity[] = [
-    'date' => $key,
-    'submissions' => (int) ($submissions[$key] ?? 0),
-    'accepted_submissions' => (int) ($acceptedSubmissions[$key] ?? 0),
-    'solved_problems' => (int) ($accepted[$key] ?? 0),
-];
+        return [
+            'Easy' => (int) ($counts['Easy'] ?? 0),
+            'Medium' => (int) ($counts['Medium'] ?? 0),
+            'Hard' => (int) ($counts['Hard'] ?? 0),
+        ];
     }
 
-    return $activity;
-}
+    public function getDailyActivity(User $user): array
+    {
+        $startDate = Carbon::today()->subDays(29)->startOfDay();
+        $endDate = Carbon::today()->endOfDay();
 
+        $submissions = Submission::query()
+            ->where('user_id', $user->id)
+            ->whereNotNull('submitted_at')
+            ->whereBetween('submitted_at', [$startDate, $endDate])
+            ->selectRaw(
+                'DATE(submitted_at) as date,
+                COUNT(*) as submissions,
+                SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as accepted_submissions',
+                ['Accepted']
+            )
+            ->groupByRaw('DATE(submitted_at)')
+            ->get()
+            ->keyBy('date');
 
-public function getLanguageBreakdown(User $user): array
-{
-    $languages = Submission::query()
-        ->where('user_id', $user->id)
-        ->whereNotNull('language')
-        ->selectRaw('
-            language,
-            COUNT(*) as total_submissions,
-            SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as accepted_submissions
-        ', ['Accepted'])
-        ->groupBy('language')
-        ->get();
+        $firstSolved = Submission::query()
+            ->where('user_id', $user->id)
+            ->where('status', 'Accepted')
+            ->whereNotNull('problem_slug')
+            ->whereNotNull('submitted_at')
+            ->selectRaw(
+                'problem_slug, MIN(submitted_at) as first_solved_at'
+            )
+            ->groupBy('problem_slug')
+            ->havingRaw(
+                'MIN(submitted_at) BETWEEN ? AND ?',
+                [$startDate, $endDate]
+            )
+            ->get()
+            ->groupBy(
+                fn ($submission) => Carbon::parse(
+                    $submission->first_solved_at
+                )->toDateString()
+            )
+            ->map(fn ($submissions) => $submissions->count());
 
-    return $languages->mapWithKeys(function ($item) {
-        return [
-            $item->language => [
-                'total_submissions' => (int) $item->total_submissions,
-                'accepted_submissions' => (int) $item->accepted_submissions,
-            ],
-        ];
-    })->toArray();
-}
+        $activity = [];
 
+        for (
+            $date = $startDate->copy();
+            $date->lte($endDate);
+            $date->addDay()
+        ) {
+            $key = $date->toDateString();
+            $day = $submissions->get($key);
 
+            $activity[] = [
+                'date' => $key,
+                'submissions' => (int) ($day->submissions ?? 0),
+                'accepted_submissions' => (int) ($day->accepted_submissions ?? 0),
+                'solved_problems' => (int) ($firstSolved[$key] ?? 0),
+            ];
+        }
+
+        return $activity;
+    }
+
+    public function getLanguageBreakdown(User $user): array
+    {
+        $languages = Submission::query()
+            ->where('user_id', $user->id)
+            ->whereNotNull('language')
+            ->selectRaw(
+                'language,
+                COUNT(*) as total_submissions,
+                SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as accepted_submissions',
+                ['Accepted']
+            )
+            ->groupBy('language')
+            ->get();
+
+        return $languages->mapWithKeys(function ($item) {
+            return [
+                $item->language => [
+                    'total_submissions' => (int) $item->total_submissions,
+                    'accepted_submissions' => (int) $item->accepted_submissions,
+                ],
+            ];
+        })->toArray();
+    }
 }

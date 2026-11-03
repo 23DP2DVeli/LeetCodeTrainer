@@ -31,7 +31,7 @@ function ActivityHeatmap({ data }: ActivityHeatmapProps) {
       <div className="activity-chart-header">
         <div>
           <h3>Activity overview</h3>
-          <p>Your LeetCode activity over the last 12 weeks</p>
+          <p>Your LeetCode activity over the last 30 days</p>
         </div>
       </div>
 
@@ -61,7 +61,7 @@ function ActivityHeatmap({ data }: ActivityHeatmapProps) {
         showMonthLabels
         showTotalCount={false}
         labels={{
-          totalCount: "{{count}} submissions in the last 12 weeks",
+          totalCount: "{{count}} submissions in the last 30 days",
         }}
         tooltips={{
           activity: {

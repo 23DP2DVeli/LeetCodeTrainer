@@ -15,10 +15,12 @@
   padding: 32px;
 }
 
+/* Dashboard error */
+
 .dashboard-error {
   padding: 20px;
   border: 1px solid #f1caca;
-  border-radius: var(--radius-md);
+  border-radius: 0;
   background: var(--color-danger-soft);
   color: var(--color-danger);
 }
@@ -31,10 +33,28 @@
   margin-top: 16px;
   padding: 8px 12px;
   border: 1px solid var(--color-danger);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   background: white;
   color: var(--color-danger);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
+
+.dashboard-error button:hover {
+  background: var(--color-danger);
+  color: white;
+}
+
+.dashboard-error button:focus-visible {
+  outline: 2px solid var(--color-danger);
+  outline-offset: 3px;
+}
+
+/* Responsive layout */
 
 @media (max-width: 760px) {
   .sidebar {
@@ -72,85 +92,16 @@
   }
 }
 
-/* Dashboard Skeleton */
-
-.dashboard-skeleton {
-  animation: skeleton-fade-in 0.3s ease;
-}
-
-.skeleton-card,
-.skeleton-chart {
-  padding: 24px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-}
-
-.skeleton-line,
-.skeleton-chart-area {
-  background: linear-gradient(90deg, #edf0f4 25%, #f6f7f9 50%, #edf0f4 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s infinite;
-  border-radius: 6px;
-}
-
-.skeleton-label {
-  width: 55%;
-  height: 13px;
-  margin-bottom: 20px;
-}
-
-.skeleton-value {
-  width: 35%;
-  height: 30px;
-}
-
-.skeleton-heading {
-  width: 180px;
-  height: 18px;
-  margin-bottom: 12px;
-}
-
-.skeleton-subheading {
-  width: 240px;
-  height: 12px;
-  margin-bottom: 28px;
-}
-
-.skeleton-chart-area {
-  width: 100%;
-  height: 150px;
-}
-
-.skeleton-chart-small {
-  height: 190px;
-}
-
-@keyframes skeleton-shimmer {
-  from {
-    background-position: 200% 0;
-  }
-
-  to {
-    background-position: -200% 0;
+@media (max-width: 480px) {
+  .dashboard-content {
+    padding: 16px 12px;
   }
 }
 
-@keyframes skeleton-fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
+/* Accessibility */
 
 @media (prefers-reduced-motion: reduce) {
-  .skeleton-line,
-  .skeleton-chart-area,
-  .dashboard-skeleton {
-    animation: none;
+  .dashboard-error button {
+    transition: none;
   }
 }
