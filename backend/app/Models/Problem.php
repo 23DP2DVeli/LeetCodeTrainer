@@ -21,6 +21,8 @@ use HasFactory;
         'constraints',
         'hints',
         'metadata',
+        'irt_difficulty',
+        'irt_discrimination',
     ];
 
     protected function casts(): array
@@ -29,6 +31,8 @@ use HasFactory;
             'hints' => 'array',
             'metadata' => 'array',
             'acceptance_rate' => 'decimal:2',
+            'irt_difficulty' => 'float',
+            'irt_discrimination' => 'float',
         ];
     }
 
